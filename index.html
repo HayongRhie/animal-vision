@@ -13,10 +13,14 @@
   <!-- Top bar -->
   <div class="topbar">
     <div class="pill" id="modeTitle">Human</div>
-    <button class="pill button" id="learnBtn">ⓘ Learn</button>
+
+    <div class="topbarRight">
+      <button class="pill button" id="colourBtn">🎨 Colour 101</button>
+      <button class="pill button" id="learnBtn">ⓘ Learn</button>
+    </div>
   </div>
 
-  <!-- Thermal legend stays (only for snake thermal concept) -->
+  <!-- Thermal legend (only for snake thermal concept) -->
   <div class="legend" id="thermalLegend" style="display:none;">
     <div class="legendTitle">Thermal (concept)</div>
     <div class="bar thermal"></div>
@@ -33,28 +37,23 @@
         <optgroup label="Animal vision (and concepts)">
           <option value="0">Human (baseline)</option>
 
-          <option value="1">Dog (dichromat)</option>
-          <option value="4">Cat (dichromat)</option>
-          <option value="8">Horse (dichromat)</option>
+          <option value="1">Mammal (dichromat: dog/cat/horse concept)</option>
 
           <option value="2">Bee (concept: UV inferred)</option>
-          <option value="9">Bird (tetrachromat concept)</option>
+          <option value="3">Bird (tetrachromat concept)</option>
 
-          <option value="16">Dragonfly (compound eye concept)</option>
-          <option value="17">Reindeer (UV-sensitive concept)</option>
-          <option value="18">Gecko (night vision concept)</option>
-          <option value="19">Octopus (contrast-dominant concept)</option>
-          <option value="20">Deep-sea fish (bioluminescence concept)</option>
+          <option value="4">Dragonfly (compound eye + polarisation concept)</option>
+          <option value="5">Deep-sea fish (bioluminescence concept)</option>
 
-          <option value="10">Shark (low-light / monochrome)</option>
-          <option value="11">Snake (thermal concept)</option>
-          <option value="12">Mantis shrimp (concept)</option>
+          <option value="6">Shark (low-light / monochrome concept)</option>
+          <option value="7">Snake (thermal concept)</option>
+          <option value="8">Mantis shrimp (concept)</option>
         </optgroup>
 
-        <optgroup label="Human colour vision differences">
-          <option value="5">Deuteranopia</option>
-          <option value="6">Protanopia</option>
-          <option value="7">Tritanopia</option>
+        <optgroup label="Human colour vision differences (concept)">
+          <option value="10">Deuteranopia</option>
+          <option value="11">Protanopia</option>
+          <option value="12">Tritanopia</option>
 
           <option value="13">Deuteranomaly</option>
           <option value="14">Protanomaly</option>
@@ -85,21 +84,22 @@
 
     <div class="hint">
       <span class="badge">Note</span>
-      Modes labelled <b>concept</b> / <b>inferred</b> are visualizations (not true UV/IR capture).
+      Modes labelled <b>concept</b> are visualisations (not direct UV/IR/polarisation capture).
     </div>
   </div>
 
-  <!-- Learn modal -->
+  <!-- One reusable modal -->
   <div class="modalBackdrop" id="modalBackdrop" style="display:none;">
     <div class="modal">
       <div class="modalHeader">
-        <div class="modalTitle" id="modalTitle">Learn</div>
+        <div class="modalTitle" id="modalTitle">Info</div>
         <button class="modalClose" id="modalClose">✕</button>
       </div>
       <div class="modalBody" id="modalBody"></div>
     </div>
   </div>
 
-  <script src="main.js"></script>
+  <!-- Cache-bust on Pages when you update -->
+  <script src="main.js?v=1"></script>
 </body>
 </html>
