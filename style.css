@@ -7,7 +7,7 @@
 body {
   margin: 0;
   background: #000;
-  overflow: hidden; /* keep if you want the app fixed */
+  overflow: hidden; /* keep fixed app feel */
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
 
@@ -53,7 +53,7 @@ canvas {
   cursor: pointer;
 }
 
-/* Thermal legend stays */
+/* Thermal legend */
 .legend {
   position: fixed;
   top: 58px;
@@ -142,22 +142,17 @@ input[type="checkbox"] { transform: scale(1.1); }
   margin-right: 6px;
 }
 
-/* Modal */
-/* Modal */
+/* Modal (mobile-safe scrolling) */
 .modalBackdrop {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.55);
   z-index: 20;
 
-  /* IMPORTANT: allow the backdrop itself to scroll on mobile */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 
-  /* Don’t center with flex; that can break inner scroll on iOS */
   padding: 18px;
-
-  /* Prevent weird scroll chaining */
   overscroll-behavior: contain;
 }
 
@@ -165,7 +160,6 @@ input[type="checkbox"] { transform: scale(1.1); }
   width: min(820px, 100%);
   margin: 0 auto;
 
-  /* Fallback first, then dynamic viewport for mobile toolbars */
   max-height: calc(100vh - 36px);
   max-height: calc(100dvh - 36px);
 
@@ -177,8 +171,6 @@ input[type="checkbox"] { transform: scale(1.1); }
 
   display: flex;
   flex-direction: column;
-
-  /* IMPORTANT */
   overflow: hidden;
 }
 
@@ -193,7 +185,7 @@ input[type="checkbox"] { transform: scale(1.1); }
 
 .modalBody {
   flex: 1 1 auto;
-  min-height: 0;                 /* CRITICAL for flex scrolling */
+  min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
@@ -230,9 +222,7 @@ code {
 }
 
 @media (min-width: 720px) {
-  .learnGrid {
-    grid-template-columns: 1fr 1fr;
-  }
+  .learnGrid { grid-template-columns: 1fr 1fr; }
 }
 
 .learnCard {
