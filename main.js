@@ -413,10 +413,20 @@ updateUIForMode();
 
 // Learn modal
 function openLearn() {
-  const m = parseInt(modeEl.value, 10);
-  const info = MODE_INFO[m] || { name: "Learn", photoreceptors: [], what: [], why: [], model: [], limits: [], try: [] };
 
-  const list = (arr) => `<ul>${(arr || []).map(x => `<li>${x}</li>`).join("")}</ul>`;
+  const m = parseInt(modeEl.value, 10);
+  const info = MODE_INFO[m] || {
+    name: "Learn",
+    photoreceptors: [],
+    what: [],
+    why: [],
+    model: [],
+    limits: [],
+    try: []
+  };
+
+  const list = (arr) =>
+    `<ul>${(arr || []).map(x => `<li>${x}</li>`).join("")}</ul>`;
 
   modalTitleEl.textContent = info.name;
 
@@ -428,6 +438,7 @@ function openLearn() {
         <div class="learnCardTitle">Wavelength scale</div>
         ${wavelengthScaleSVG()}
       </div>
+
       <div class="learnCard">
         <div class="learnCardTitle">Photoreceptor channels (concept)</div>
         ${coneDiagramSVG(m)}
@@ -436,12 +447,16 @@ function openLearn() {
 
     <h3>Photoreceptors / channels</h3>
     ${list(info.photoreceptors)}
+
     <h3>What you should notice</h3>
     ${list(info.what)}
+
     <h3>Why this happens</h3>
     ${list(info.why)}
+
     <h3>What the app does (model)</h3>
     ${list(info.model)}
+
     <h3>Limits / what it is NOT</h3>
     ${list(info.limits)}
 
@@ -453,14 +468,28 @@ function openLearn() {
     </div>
   `;
 
-  modalBackdrop.style.display = "flex";
+  /* ---------- MOBILE FIX ---------- */
+
+  // prevent background scrolling
+  document.body.classList.add("modalOpen");
+
+  // show modal
+  modalBackdrop.style.display = "block";
+
+  // reset scroll position
+  modalBody.scrollTop = 0;
 }
-function closeLearn() { modalBackdrop.style.display = "none"; }
-learnBtn.addEventListener("click", openLearn);
-modalClose.addEventListener("click", closeLearn);
-modalBackdrop.addEventListener("click", (e) => {
-  if (e.target === modalBackdrop) closeLearn();
-});
+
+
+
+function closeLearn() {
+
+  // hide modal
+  modalBackdrop.style.display = "none";
+
+  // re-enable background scrolling
+  document.body.classList.remove("modalOpen");
+}
 
 /* ---------- WebGL ---------- */
 

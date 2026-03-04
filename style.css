@@ -7,8 +7,13 @@
 body {
   margin: 0;
   background: #000;
-  overflow: hidden;
+  overflow: hidden; /* keep if you want the app fixed */
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+body.modalOpen {
+  position: fixed;
+  width: 100%;
 }
 
 video { display: none; }
@@ -160,7 +165,8 @@ input[type="checkbox"] { transform: scale(1.1); }
   width: min(820px, 100%);
   margin: 0 auto;
 
-  /* Use dynamic viewport units for mobile toolbars */
+  /* Fallback first, then dynamic viewport for mobile toolbars */
+  max-height: calc(100vh - 36px);
   max-height: calc(100dvh - 36px);
 
   background: rgba(15,15,15,0.92);
@@ -169,9 +175,10 @@ input[type="checkbox"] { transform: scale(1.1); }
   border: 1px solid rgba(255,255,255,0.12);
   backdrop-filter: blur(14px);
 
-  /* Header fixed, body scrolls */
   display: flex;
   flex-direction: column;
+
+  /* IMPORTANT */
   overflow: hidden;
 }
 
@@ -189,11 +196,17 @@ input[type="checkbox"] { transform: scale(1.1); }
   min-height: 0;                 /* CRITICAL for flex scrolling */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;           /* helps mobile scrolling */
+  touch-action: pan-y;
   padding: 14px;
 
   color: rgba(255,255,255,0.88);
   line-height: 1.5;
+}
+
+@media (max-width: 420px) {
+  .modalBackdrop { padding: 12px; }
+  .modal { border-radius: 14px; }
+  .modalBody { padding: 12px; }
 }
 
 .smallNote {
