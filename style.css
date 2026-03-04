@@ -7,11 +7,10 @@
 body {
   margin: 0;
   background: #000;
-  overflow: hidden; /* app stays fixed */
+  overflow: hidden;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
 
-/* When modal is open, prevent background scrolling on mobile */
 body.modalOpen {
   position: fixed;
   width: 100%;
@@ -61,10 +60,31 @@ canvas {
   cursor: pointer;
 }
 
+/* Status line */
+.status {
+  position: fixed;
+  top: 58px;
+  left: 10px;
+  right: 10px;
+  max-width: 860px;
+  margin: 0 auto;
+  z-index: 6;
+
+  background: rgba(0,0,0,0.65);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.88);
+  padding: 10px 12px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  font-size: 13px;
+}
+
+.status b { color: rgba(255,255,255,0.95); }
+
 /* Thermal legend */
 .legend {
   position: fixed;
-  top: 58px;
+  top: 108px;
   left: 10px;
   background: rgba(0,0,0,0.55);
   color: var(--text);
@@ -99,7 +119,7 @@ canvas {
   margin-top: 6px;
 }
 
-/* Controls panel */
+/* Controls */
 .controls {
   position: fixed;
   left: 10px;
@@ -151,7 +171,7 @@ input[type="checkbox"] { transform: scale(1.1); }
   margin-right: 6px;
 }
 
-/* Modal (mobile scroll-safe) */
+/* Modal (scrollable on phone) */
 .modalBackdrop {
   position: fixed;
   inset: 0;
@@ -160,6 +180,7 @@ input[type="checkbox"] { transform: scale(1.1); }
 
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+
   padding: 18px;
   overscroll-behavior: contain;
 }
@@ -221,7 +242,7 @@ code {
   border-radius: 6px;
 }
 
-/* Learn/Colour 101 graphics */
+/* Cards for graphics */
 .learnGrid {
   display: grid;
   grid-template-columns: 1fr;

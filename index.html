@@ -20,7 +20,10 @@
     </div>
   </div>
 
-  <!-- Thermal legend (only for snake thermal concept) -->
+  <!-- Status -->
+  <div class="status" id="status" style="display:none;"></div>
+
+  <!-- Thermal legend -->
   <div class="legend" id="thermalLegend" style="display:none;">
     <div class="legendTitle">Thermal (concept)</div>
     <div class="bar thermal"></div>
@@ -36,7 +39,6 @@
       <select id="mode">
         <optgroup label="Animal vision (and concepts)">
           <option value="0">Human (baseline)</option>
-
           <option value="1">Mammal (dichromat: dog/cat/horse concept)</option>
 
           <option value="2">Bee (concept: UV inferred)</option>
@@ -84,11 +86,11 @@
 
     <div class="hint">
       <span class="badge">Note</span>
-      Modes labelled <b>concept</b> are visualisations (not direct UV/IR/polarisation capture).
+      “Concept” modes are visualisations (not direct UV/IR/polarisation capture).
     </div>
   </div>
 
-  <!-- One reusable modal -->
+  <!-- Modal -->
   <div class="modalBackdrop" id="modalBackdrop" style="display:none;">
     <div class="modal">
       <div class="modalHeader">
@@ -99,7 +101,7 @@
     </div>
   </div>
 
-  <!-- Cache-bust on Pages when you update -->
+  <!-- Bump v= when you update to avoid caching -->
   <script src="main.js?v=1"></script>
 </body>
 </html>
