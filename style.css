@@ -143,26 +143,33 @@ input[type="checkbox"] { transform: scale(1.1); }
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 18px;
   z-index: 20;
 
-  /* allow scroll wheel/touch to reach modal body */
+  /* IMPORTANT: allow the backdrop itself to scroll on mobile */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  /* Don’t center with flex; that can break inner scroll on iOS */
+  padding: 18px;
+
+  /* Prevent weird scroll chaining */
   overscroll-behavior: contain;
 }
 
 .modal {
-  width: min(820px, 95vw);
-  max-height: 82vh;
+  width: min(820px, 100%);
+  margin: 0 auto;
+
+  /* Use dynamic viewport units for mobile toolbars */
+  max-height: calc(100dvh - 36px);
+
   background: rgba(15,15,15,0.92);
   color: var(--text);
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.12);
   backdrop-filter: blur(14px);
 
-  /* key: header fixed, body scrolls */
+  /* Header fixed, body scrolls */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -179,12 +186,14 @@ input[type="checkbox"] { transform: scale(1.1); }
 
 .modalBody {
   flex: 1 1 auto;
-  padding: 14px;
+  min-height: 0;                 /* CRITICAL for flex scrolling */
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* iOS momentum scrolling */
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;           /* helps mobile scrolling */
+  padding: 14px;
+
   color: rgba(255,255,255,0.88);
   line-height: 1.5;
-  min-height: 0;
 }
 
 .smallNote {
