@@ -177,7 +177,7 @@ input[type="checkbox"] { transform: scale(1.1); }
   flex: 0 0 auto;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: centre;
   padding: 14px 14px;
   border-bottom: 1px solid rgba(255,255,255,0.10);
 }
@@ -221,9 +221,7 @@ code {
 }
 
 @media (min-width: 720px) {
-  .learnGrid {
-    grid-template-columns: 1fr 1fr;
-  }
+  .learnGrid { grid-template-columns: 1fr 1fr; }
 }
 
 .learnCard {

@@ -83,10 +83,10 @@ function coneDiagramSVG(modeId) {
     label = "Bird (concept): 4 cones (incl. UV)";
     cones = ["UV", "S", "M", "L"];
     note = "A 4D cone space can’t be fully displayed on an RGB screen.";
-  } else if (m === 10) {
-    label = "Low-light concept: rod-dominant";
-    cones = ["Rod"];
-    note = "Shown as grayscale/contrast to represent luminance emphasis.";
+  } else if ([10, 18, 19, 20, 15].includes(m)) {
+    label = "Luminance/contrast-dominant (concept)";
+    cones = ["Rod / Luminance"];
+    note = "Displayed as grayscale/contrast/edges depending on the mode.";
   } else if (m === 11) {
     label = "Thermal concept: IR sense (not camera)";
     cones = ["Visible RGB", "IR (concept)"];
@@ -95,14 +95,18 @@ function coneDiagramSVG(modeId) {
     label = "Many-channel concept (mantis shrimp)";
     cones = ["Many channels (concept)"];
     note = "We show ‘channel richness’ without claiming accuracy.";
+  } else if (m === 16) {
+    label = "Dragonfly (compound eye concept)";
+    cones = ["Many facets"];
+    note = "Shown as a facet/mosaic view (educational).";
+  } else if (m === 17) {
+    label = "Reindeer (UV-sensitive concept)";
+    cones = ["S/M/L + UV sensitivity (concept)"];
+    note = "We apply a cooler shift + inferred UV emphasis.";
   } else if ([5, 6, 7, 13, 14].includes(m)) {
     label = "Human colour-vision difference (concept)";
     cones = ["S", "M", "L"];
     note = "We modify channel mixing to mimic reduced separability (educational).";
-  } else if (m === 15) {
-    label = "Achromatopsia concept: luminance-driven";
-    cones = ["Rod / Luminance"];
-    note = "Displayed as grayscale with adjustable contrast.";
   }
 
   const items = cones.map((c, i) => {
@@ -112,7 +116,7 @@ function coneDiagramSVG(modeId) {
     return `
       <g>
         <rect x="${x}" y="38" width="${w}" height="${h}" rx="14" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.18)"/>
-        <text x="${x + w/2}" y="73" text-anchor="middle" fill="rgba(255,255,255,0.88)" font-size="16" font-family="system-ui" font-weight="600">${c}</text>
+        <text x="${x + w/2}" y="73" text-anchor="middle" fill="rgba(255,255,255,0.88)" font-size="14" font-family="system-ui" font-weight="600">${c}</text>
         <text x="${x + w/2}" y="95" text-anchor="middle" fill="rgba(255,255,255,0.65)" font-size="11" font-family="system-ui">channel</text>
       </g>
     `;
@@ -127,14 +131,14 @@ function coneDiagramSVG(modeId) {
   `;
 }
 
-/* ---------- Scientific background blocks used in Learn panel ---------- */
+/* ---------- Learn text ---------- */
 
 const SCIENCE_BG = `
 <h3>Core idea: colour is biology + physics</h3>
 <ul>
   <li><b>Light</b> is electromagnetic radiation. Humans call ~<b>400–700 nm</b> “visible.”</li>
   <li><b>Photoreceptors</b> convert photons to neural signals. Humans use <b>cones</b> for colour and <b>rods</b> for low-light.</li>
-  <li>Human cones are often summarized as <b>S/M/L</b> (short/medium/long wavelength sensitive). Many animals have different sets.</li>
+  <li>Human cones are often summarised as <b>S/M/L</b> (short/medium/long wavelength sensitive). Many animals have different sets.</li>
 </ul>
 
 <h3>What this visualization is doing</h3>
@@ -149,7 +153,7 @@ const SCIENCE_BG = `
 </div>
 `;
 
-/* ---------- Mode info + Try-this prompts ---------- */
+/* ---------- Mode info ---------- */
 
 const MODE_INFO = {
   0: {
@@ -178,7 +182,7 @@ const MODE_INFO = {
     what: ["Reduced red–green discrimination (similar to dog)."],
     why: ["Many mammals have fewer colour channels than humans."],
     model: ["A slightly different R/G weighting than dog; slider controls strength."],
-    limits: ["Stylized visualization."],
+    limits: ["Stylised visualization."],
     try: ["Point at colourful clothing or books.", "Look for reduced separation between warm hues."]
   },
 
@@ -203,11 +207,7 @@ const MODE_INFO = {
       "UV slider controls blend."
     ],
     limits: ["Phones can’t measure UV here — this is inferred from visible cues."],
-    try: [
-      "Try printed magazines, glossy packaging, certain fabrics.",
-      "Try bright whites (in real life, many fluoresce under UV).",
-      "Use Compare to show the added ‘extra channel’ concept."
-    ]
+    try: ["Try printed magazines, glossy packaging, certain fabrics.", "Use Compare to see the difference."]
   },
 
   9: {
@@ -220,6 +220,56 @@ const MODE_INFO = {
     try: ["Try colourful scenes (posters, signs).", "Boost saturation and compare with baseline."]
   },
 
+  16: {
+    name: "Dragonfly (compound eye concept)",
+    photoreceptors: ["Compound eyes made of many facets (ommatidia)."],
+    what: ["A mosaic/facet look; fine detail collapses into ‘cells’."],
+    why: ["Each facet samples a small part of the scene; the brain reconstructs from many samples."],
+    model: ["We pixelate into a facet grid and add a small contrast boost."],
+    limits: ["Not physically accurate sampling; just a visual concept."],
+    try: ["Point at text or patterned fabrics.", "Increase Facet strength to see the mosaic effect."]
+  },
+
+  17: {
+    name: "Reindeer (UV-sensitive concept)",
+    photoreceptors: ["Reindeer can detect near-UV (beyond typical human vision)."],
+    what: ["Cooler look + UV emphasis overlay."],
+    why: ["UV sensitivity can increase contrast in snowy environments (conceptually)." ],
+    model: ["Apply a cool shift, reduce red, and blend an inferred UV proxy overlay."],
+    limits: ["Phones can’t measure UV here — overlay is inferred from RGB."],
+    try: ["Try outdoor light or bright whites.", "Increase UV emphasis to exaggerate the effect."]
+  },
+
+  18: {
+    name: "Gecko (night vision concept)",
+    photoreceptors: ["Some geckos are extremely sensitive in low light (concept)."],
+    what: ["Brighter shadows and stronger contrast in dim scenes."],
+    why: ["Night-adapted systems prioritise luminance signals."],
+    model: ["Luminance boost + contrast curve (like a ‘night mode’ concept)."],
+    limits: ["Not species-specific; communicates low-light emphasis."],
+    try: ["Dim the room and point at objects.", "Increase boost and watch details appear."]
+  },
+
+  19: {
+    name: "Octopus (contrast-dominant concept)",
+    photoreceptors: ["Often described as colour-blind-ish, relying on contrast patterns (simplified concept)."],
+    what: ["Mostly monochrome with edges emphasised."],
+    why: ["Contrast and texture can dominate perception for pattern recognition."],
+    model: ["Convert to luminance and apply edge emphasis; slider increases edges."],
+    limits: ["Octopus perception is complex; this is an educational simplification."],
+    try: ["Try textured objects (wood grain, fabric).", "Increase edges and compare with baseline."]
+  },
+
+  20: {
+    name: "Deep-sea fish (bioluminescence concept)",
+    photoreceptors: ["Deep-sea environments are dark; bioluminescence can stand out strongly."],
+    what: ["Bright features ‘glow’ and dominate."],
+    why: ["In darkness, tiny bright spots carry a lot of information."],
+    model: ["Emphasise highlights and add a glow-like bloom effect (conceptually)."],
+    limits: ["Not a real physical bloom model; just a visual cue."],
+    try: ["Try reflective surfaces or small lights.", "Increase glow to see highlights pop."]
+  },
+
   10: {
     name: "Shark (low-light / monochrome)",
     photoreceptors: ["Low-light vision is often rod-dominant (luminance heavy)."],
@@ -227,7 +277,7 @@ const MODE_INFO = {
     why: ["In dim conditions, luminance/contrast dominates over hue."],
     model: ["Convert to luminance and apply a contrast curve; slider controls contrast."],
     limits: ["Not species-specific; communicates the low-light idea."],
-    try: ["Dim the room slightly and point at a scene.", "Increase contrast to see edge emphasis."]
+    try: ["Dim the room slightly.", "Increase contrast to see edge emphasis."]
   },
 
   11: {
@@ -235,13 +285,9 @@ const MODE_INFO = {
     photoreceptors: ["Some snakes sense IR via specialised organs (not via phone camera)."],
     what: ["Thermal-style heatmap overlay blended over the scene."],
     why: ["Shows the idea of a non-visible channel adding information."],
-    model: [
-      "Compute a heat-like proxy from visible cues (brightness + red weighting).",
-      "Map to a thermal colourmap and blend.",
-      "Sliders: thermal contrast + intensity."
-    ],
+    model: ["Compute a heat-like proxy from visible cues and map to a thermal colourmap; sliders control contrast/intensity."],
     limits: ["Not real IR imaging. True thermal requires an IR sensor."],
-    try: ["Point at your hand/face near the camera (conceptual).", "Use Compare to emphasize it’s not real thermal."]
+    try: ["Point at your hand/face near the camera (conceptual).", "Use Compare to show it’s not real thermal."]
   },
 
   12: {
@@ -251,7 +297,7 @@ const MODE_INFO = {
     why: ["Communicates the idea of many channels without claiming accuracy."],
     model: ["Quantise hue into N bands and remap colours; slider increases banding."],
     limits: ["Strongly conceptual."],
-    try: ["Point at rainbow gradients / colourful posters.", "Increase channelisation to see banding."]
+    try: ["Point at gradients / colourful posters.", "Increase channelisation to see banding."]
   },
 
   5: {
@@ -311,7 +357,7 @@ const MODE_INFO = {
     why: ["Colour channels contribute little; luminance dominates."],
     model: ["Convert to luminance and adjust contrast; slider controls contrast."],
     limits: ["Educational concept; real experiences vary."],
-    try: ["Try colourful scenes.", "Use contrast slider to emphasize edges/forms."]
+    try: ["Try colourful scenes.", "Use contrast slider to emphasise edges/forms."]
   }
 };
 
@@ -360,11 +406,6 @@ function updateUIForMode() {
     uvLabel.textContent = "UV layer (inferred)";
   }
 
-  if (m === 10) {
-    strengthEl.disabled = false;
-    strengthLabel.textContent = "Contrast";
-  }
-
   if (m === 11) {
     strengthEl.disabled = false;
     uvEl.disabled = false;
@@ -378,9 +419,41 @@ function updateUIForMode() {
     strengthLabel.textContent = "Channelisation";
   }
 
+  if (m === 10) {
+    strengthEl.disabled = false;
+    strengthLabel.textContent = "Contrast";
+  }
+
   if (m === 15) {
     strengthEl.disabled = false;
     strengthLabel.textContent = "Contrast";
+  }
+
+  if (m === 16) {
+    strengthEl.disabled = false;
+    strengthLabel.textContent = "Facet strength";
+  }
+
+  if (m === 17) {
+    strengthEl.disabled = false;
+    uvEl.disabled = false;
+    strengthLabel.textContent = "Cool shift";
+    uvLabel.textContent = "UV emphasis (inferred)";
+  }
+
+  if (m === 18) {
+    strengthEl.disabled = false;
+    strengthLabel.textContent = "Boost";
+  }
+
+  if (m === 19) {
+    strengthEl.disabled = false;
+    strengthLabel.textContent = "Edge emphasis";
+  }
+
+  if (m === 20) {
+    strengthEl.disabled = false;
+    strengthLabel.textContent = "Glow";
   }
 }
 modeEl.addEventListener("change", updateUIForMode);
@@ -570,8 +643,8 @@ vec3 birdConcept(vec3 rgb, float satBoost, float uvi){
   return mix(sat, uvCol, a);
 }
 
-// Shark: monochrome + contrast
-vec3 sharkLowLight(vec3 rgb, float c){
+// Monochrome + contrast (generic)
+vec3 monoContrast(vec3 rgb, float c){
   float y = luma(rgb);
   float cc = 1.0 + 1.8*c;
   float v = clamp((y - 0.5)*cc + 0.5, 0.0, 1.0);
@@ -663,10 +736,92 @@ vec3 deuteranomaly(vec3 rgb){
   return vec3(rgb.r, g, rgb.b);
 }
 vec3 achromatopsia(vec3 rgb, float contrastAmt){
+  return monoContrast(rgb, contrastAmt);
+}
+
+/* ---------- NEW MODES ---------- */
+
+// Pixelate helper (dragonfly facet concept)
+vec3 pixelate(sampler2D t, vec2 uv0, float cell){
+  vec2 grid = vec2(cell);
+  vec2 uvp = (floor(uv0 * grid) + 0.5) / grid;
+  return texture2D(t, uvp).rgb;
+}
+
+vec3 dragonflyConcept(sampler2D t, vec2 uv0, vec3 rgb, float amt){
+  // Facet count increases with amt
+  float cells = mix(60.0, 220.0, clamp(amt, 0.0, 1.0));
+  vec3 pix = pixelate(t, uv0, cells);
+  // Slight contrast pop
+  vec3 mono = monoContrast(pix, 0.35);
+  return mix(pix, mono, 0.25);
+}
+
+vec3 reindeerConcept(vec3 rgb, float coolShift, float uvi){
+  // Cool shift: reduce red, lift blue, keep green moderate
+  float s = clamp(coolShift, 0.0, 1.0);
+  vec3 cool = vec3(
+    mix(rgb.r, 0.55*rgb.r + 0.45*rgb.g, s),
+    mix(rgb.g, 0.90*rgb.g + 0.10*rgb.b, 0.4*s),
+    mix(rgb.b, min(1.0, rgb.b + 0.25*(rgb.g + rgb.b)), 0.6*s)
+  );
+
+  // Add inferred UV emphasis overlay
+  float u = uvProxy(rgb);
+  vec3 uvCol = falseUV(u);
+  float a = clamp(uvi, 0.0, 1.0) * 0.65;
+  return mix(cool, uvCol, a);
+}
+
+// Gecko night vision: lift shadows + contrast
+vec3 geckoNight(vec3 rgb, float amt){
   float y = luma(rgb);
-  float cc = 1.0 + 1.8*contrastAmt;
-  float v = clamp((y - 0.5)*cc + 0.5, 0.0, 1.0);
-  return vec3(v);
+  float lift = mix(0.0, 0.28, clamp(amt, 0.0, 1.0));
+  float boosted = clamp(y + lift*(1.0 - y), 0.0, 1.0);
+
+  float cc = 1.0 + 2.2*amt;
+  float v = clamp((boosted - 0.5)*cc + 0.5, 0.0, 1.0);
+
+  // Put it back as slightly tinted monochrome (feels more “night camera”)
+  return vec3(v * 0.98, v, v * 1.05);
+}
+
+// Simple edge emphasis for octopus mode
+vec3 edgeEmphasis(sampler2D t, vec2 uv0, vec2 texel, float amt){
+  vec3 c  = texture2D(t, uv0).rgb;
+  vec3 cx = texture2D(t, uv0 + vec2(texel.x, 0.0)).rgb;
+  vec3 cy = texture2D(t, uv0 + vec2(0.0, texel.y)).rgb;
+
+  float e = length(c - cx) + length(c - cy);
+  e = clamp(e * (2.0 + 6.0*amt), 0.0, 1.0);
+
+  float y = luma(c);
+  float base = clamp((y - 0.5)*(1.0 + 1.5*amt) + 0.5, 0.0, 1.0);
+
+  // edges brighten
+  float outv = clamp(base + 0.35*e, 0.0, 1.0);
+  return vec3(outv);
+}
+
+// Glow-ish highlight emphasis for deep-sea concept
+vec3 deepSeaGlow(sampler2D t, vec2 uv0, vec2 texel, float amt){
+  vec3 c = texture2D(t, uv0).rgb;
+  float y = luma(c);
+
+  // emphasise highlights
+  float thr = mix(0.75, 0.55, amt);
+  float glowMask = smoothstep(thr, 1.0, y);
+
+  // crude blur: average a few neighbours
+  vec3 sum = c;
+  sum += texture2D(t, uv0 + vec2(texel.x, 0.0)).rgb;
+  sum += texture2D(t, uv0 - vec2(texel.x, 0.0)).rgb;
+  sum += texture2D(t, uv0 + vec2(0.0, texel.y)).rgb;
+  sum += texture2D(t, uv0 - vec2(0.0, texel.y)).rgb;
+  vec3 blur = sum / 5.0;
+
+  vec3 glow = mix(c, blur, 0.75);
+  return mix(c, glow, glowMask * clamp(amt, 0.0, 1.0));
 }
 
 void main() {
@@ -683,9 +838,16 @@ void main() {
     else if (mode == 4) result = mix(rgb, catView(rgb), clamp(strength, 0.0, 1.0));
     else if (mode == 8) result = mix(rgb, horseView(rgb), clamp(strength, 0.0, 1.0));
     else if (mode == 9) result = birdConcept(rgb, strength, uvIntensity);
-    else if (mode == 10) result = sharkLowLight(rgb, strength);
+
+    else if (mode == 10) result = monoContrast(rgb, strength);
     else if (mode == 11) result = snakeThermal(rgb, strength, uvIntensity);
     else if (mode == 12) result = mantisConcept(rgb, strength);
+
+    else if (mode == 16) result = dragonflyConcept(tex, uv, rgb, strength);
+    else if (mode == 17) result = reindeerConcept(rgb, strength, uvIntensity);
+    else if (mode == 18) result = geckoNight(rgb, strength);
+    else if (mode == 19) result = edgeEmphasis(tex, uv, vec2(1.0/720.0, 1.0/1280.0), strength);
+    else if (mode == 20) result = deepSeaGlow(tex, uv, vec2(1.0/720.0, 1.0/1280.0), strength);
 
     else if (mode == 5) result = deuteranopia(rgb);
     else if (mode == 6) result = protanopia(rgb);
