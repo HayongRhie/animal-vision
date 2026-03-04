@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Animal Vision</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <video id="video" autoplay playsinline></video>
+  <canvas id="canvas"></canvas>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="pill" id="modeTitle">Human</div>
+    <button class="pill button" id="learnBtn">ⓘ Learn</button>
+  </div>
+
+  <!-- Thermal legend stays (only for snake thermal concept) -->
+  <div class="legend" id="thermalLegend" style="display:none;">
+    <div class="legendTitle">Thermal (concept)</div>
+    <div class="bar thermal"></div>
+    <div class="legendRow">
+      <span>cooler</span><span>hotter</span>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="row">
+      <label for="mode">Mode</label>
+      <select id="mode">
+        <optgroup label="Animal vision (and concepts)">
+          <option value="0">Human (baseline)</option>
+
+          <option value="1">Dog (dichromat)</option>
+          <option value="4">Cat (dichromat)</option>
+          <option value="8">Horse (dichromat)</option>
+
+          <option value="2">Bee (concept: UV inferred)</option>
+          <option value="3">UV False Color (inferred)</option>
+          <option value="9">Bird (tetrachromat concept)</option>
+
+          <option value="10">Shark (low-light / monochrome)</option>
+          <option value="11">Snake (thermal concept)</option>
+          <option value="12">Mantis Shrimp (concept)</option>
+        </optgroup>
+
+        <optgroup label="Human color vision differences">
+          <option value="5">Deuteranopia</option>
+          <option value="6">Protanopia</option>
+          <option value="7">Tritanopia</option>
+
+          <option value="13">Deuteranomaly</option>
+          <option value="14">Protanomaly</option>
+          <option value="15">Achromatopsia (total color blindness concept)</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="row">
+      <label id="strengthLabel" for="strength">Strength</label>
+      <input type="range" id="strength" min="0" max="1" step="0.01" value="0.85" />
+    </div>
+
+    <div class="row">
+      <label id="uvLabel" for="uv">UV / Overlay</label>
+      <input type="range" id="uv" min="0" max="1" step="0.01" value="0.75" />
+    </div>
+
+    <div class="row inline">
+      <label for="compare">Compare</label>
+      <input type="checkbox" id="compare" checked />
+    </div>
+
+    <div class="row" id="splitRow">
+      <label for="split">Split</label>
+      <input type="range" id="split" min="0" max="1" step="0.01" value="0.5" />
+    </div>
+
+    <div class="hint">
+      <span class="badge">Note</span>
+      Modes labeled <b>concept</b> / <b>inferred</b> are visualizations (not true UV/IR capture).
+    </div>
+  </div>
+
+  <!-- Learn modal -->
+  <div class="modalBackdrop" id="modalBackdrop" style="display:none;">
+    <div class="modal">
+      <div class="modalHeader">
+        <div class="modalTitle" id="modalTitle">Learn</div>
+        <button class="modalClose" id="modalClose">✕</button>
+      </div>
+      <div class="modalBody" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
