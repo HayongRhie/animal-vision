@@ -582,6 +582,7 @@ float luma(vec3 rgb) {
 }
 
 float uvProxy(vec3 rgb){
+  // simple heuristic "UV-like" proxy from RGB (concept only)
   return clamp(rgb.b - 0.5*rgb.r, 0.0, 1.0);
 }
 
@@ -604,8 +605,22 @@ vec3 overlayUV(vec3 rgb, float amt){
 
 vec3 saturateBoost(vec3 rgb, float s){
   float y = luma(rgb);
-  vec3 gray = vec3(y);
-  return clamp(mix(gray, rgb, s), 0.0, 1.0);
+  vec3 g = vec3(y);
+  return clamp(mix(g, rgb, s), 0.0, 1.0);
+}
+
+float contrastCurve(float x, float c){
+  // c in [0..1], maps to [1..2.2]
+  float k = 1.0 + 1.2*c;
+  return clamp((x - 0.5)*k + 0.5, 0.0, 1.0);
+}
+
+vec3 contrastRGB(vec3 rgb, float c){
+  return vec3(
+    contrastCurve(rgb.r, c),
+    contrastCurve(rgb.g, c),
+    contrastCurve(rgb.b, c)
+  );
 }
 
 /* Mammal dichromat-ish models */
@@ -623,44 +638,45 @@ vec3 horseView(vec3 rgb){
   return vec3(rg, rg, b);
 }
 
-/* Bee concept: suppress red + UV overlay */
+/* Bee: suppress red + UV overlay */
 vec3 beeConcept(vec3 rgb, float uvi){
-  vec3 base = vec3(0.60*rgb.r, rgb.g, rgb.b);
+  vec3 base = vec3(0.55*rgb.r, rgb.g, rgb.b);
   return mix(base, falseUV(uvProxy(rgb)), clamp(uvi, 0.0, 1.0));
 }
 
-/* Bird concept: saturation + mild UV overlay */
+/* Bird: saturation + mild UV overlay */
 vec3 birdConcept(vec3 rgb, float satAmt, float uvi){
   vec3 sat = saturateBoost(rgb, 1.0 + 1.2*satAmt);
-  float a = clamp(uvi, 0.0, 1.0) * 0.6;
+  float a = clamp(uvi, 0.0, 1.0) * 0.55;
   return mix(sat, falseUV(uvProxy(rgb)), a);
 }
 
-/* Pigeon: stronger saturation, gentler UV overlay */
+/* Pigeon: stronger saturation + slightly increased contrast; gentler UV */
 vec3 pigeonConcept(vec3 rgb, float satAmt, float uvi){
-  vec3 sat = saturateBoost(rgb, 1.0 + 1.5*satAmt);
-  float a = clamp(uvi, 0.0, 1.0) * 0.45;
-  return mix(sat, falseUV(uvProxy(rgb)), a);
+  vec3 sat = saturateBoost(rgb, 1.0 + 1.6*satAmt);
+  vec3 ctr = contrastRGB(sat, 0.35*satAmt);
+  float a = clamp(uvi, 0.0, 1.0) * 0.35;
+  return mix(ctr, falseUV(uvProxy(rgb)), a);
 }
 
-/* Bluebottle butterfly: vivid saturation + stronger UV overlay */
+/* Bluebottle butterfly: vivid blues + strong UV overlay */
 vec3 butterflyConcept(vec3 rgb, float satAmt, float uvi){
-  vec3 sat = saturateBoost(rgb, 1.0 + 1.7*satAmt);
-  // Slight extra “blue pop”
-  vec3 pop = clamp(vec3(0.95*sat.r, 0.95*sat.g, 1.12*sat.b), 0.0, 1.0);
-  float a = clamp(uvi, 0.0, 1.0) * 0.80;
+  vec3 sat = saturateBoost(rgb, 1.0 + 1.8*satAmt);
+  // "Iridescent blue pop" (concept): boost B, slightly reduce G
+  vec3 pop = clamp(vec3(0.98*sat.r, 0.90*sat.g, 1.18*sat.b), 0.0, 1.0);
+  pop = contrastRGB(pop, 0.25 + 0.35*satAmt);
+  float a = clamp(uvi, 0.0, 1.0) * 0.85;
   return mix(pop, falseUV(uvProxy(rgb)), a);
 }
 
 /* Low-light / monochrome */
 vec3 lowLight(vec3 rgb, float c){
   float y = luma(rgb);
-  float cc = 1.0 + 1.8*c;
-  float v = clamp((y - 0.5)*cc + 0.5, 0.0, 1.0);
+  float v = contrastCurve(y, c);
   return vec3(v);
 }
 
-/* Thermal colormap */
+/* Thermal */
 vec3 heatColor(float t){
   t = clamp(t, 0.0, 1.0);
   vec3 a = vec3(0.0, 0.0, 0.0);
@@ -684,19 +700,16 @@ vec3 heatColor(float t){
   return mix(mid, high, smoothstep(0.55, 0.9, t));
 }
 
-/* Snake thermal concept */
 vec3 snakeThermal(vec3 rgb, float contrastAmt, float intensity){
   float y = luma(rgb);
   float heat = clamp(0.55*rgb.r + 0.45*y, 0.0, 1.0);
-  float cc = 1.0 + 2.0*contrastAmt;
-  heat = clamp((heat - 0.5)*cc + 0.5, 0.0, 1.0);
-
+  heat = contrastCurve(heat, contrastAmt);
   vec3 col = heatColor(heat);
   float a = clamp(intensity, 0.0, 1.0);
   return mix(rgb, col, a);
 }
 
-/* Many-channel “channelisation” helpers */
+/* Hue approximation + rainbow bands */
 vec3 rainbow(float t){
   float r = 0.5 + 0.5*cos(6.28318*(t + 0.00));
   float g = 0.5 + 0.5*cos(6.28318*(t + 0.33));
@@ -717,7 +730,7 @@ float hueApprox(vec3 c) {
   return h;
 }
 
-/* Mantis shrimp concept */
+/* Mantis shrimp: banded remap */
 vec3 mantisConcept(vec3 rgb, float amt){
   float h = hueApprox(rgb);
   float n = mix(6.0, 16.0, clamp(amt, 0.0, 1.0));
@@ -726,17 +739,13 @@ vec3 mantisConcept(vec3 rgb, float amt){
   return mix(rgb, pseudo, clamp(amt, 0.0, 1.0));
 }
 
-/* Dragonfly concept: more bands than mantis */
+/* Dragonfly: many more bands + extra contrast */
 vec3 dragonflyConcept(vec3 rgb, float amt){
   float h = hueApprox(rgb);
-  float n = mix(12.0, 40.0, clamp(amt, 0.0, 1.0));
+  float n = mix(16.0, 48.0, clamp(amt, 0.0, 1.0));
   float band = floor(h * n) / n;
   vec3 pseudo = rainbow(band);
-  // Mild contrast boost too
-  float y = luma(rgb);
-  float cc = 1.0 + 0.9*amt;
-  float y2 = clamp((y - 0.5)*cc + 0.5, 0.0, 1.0);
-  vec3 base = mix(vec3(y2), rgb, 0.65);
+  vec3 base = contrastRGB(rgb, 0.20 + 0.55*amt);
   return mix(base, pseudo, clamp(amt, 0.0, 1.0));
 }
 
@@ -762,8 +771,7 @@ vec3 deuteranomaly(vec3 rgb){
 }
 vec3 achromatopsia(vec3 rgb, float contrastAmt){
   float y = luma(rgb);
-  float cc = 1.0 + 1.8*contrastAmt;
-  float v = clamp((y - 0.5)*cc + 0.5, 0.0, 1.0);
+  float v = contrastCurve(y, contrastAmt);
   return vec3(v);
 }
 
@@ -788,7 +796,8 @@ void main() {
 
     else if (mode == 18) result = dragonflyConcept(rgb, strength);
 
-    else if (mode == 19) result = overlayUV(rgb, uvIntensity);
+    // Reindeer: keep it simple + clearly visible (UV overlay with slider)
+    else if (mode == 19) result = overlayUV(contrastRGB(rgb, 0.25), uvIntensity * 0.85);
 
     else if (mode == 10) result = lowLight(rgb, strength);
     else if (mode == 11) result = snakeThermal(rgb, strength, uvIntensity);
