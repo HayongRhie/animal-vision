@@ -7,10 +7,11 @@
 body {
   margin: 0;
   background: #000;
-  overflow: hidden;
+  overflow: hidden; /* app stays fixed */
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
 
+/* When modal is open, prevent background scrolling on mobile */
 body.modalOpen {
   position: fixed;
   width: 100%;
@@ -25,6 +26,7 @@ canvas {
   height: 100%;
 }
 
+/* Topbar */
 .topbar {
   position: fixed;
   top: 10px;
@@ -36,6 +38,12 @@ canvas {
   max-width: 860px;
   margin: 0 auto;
   z-index: 5;
+}
+
+.topbarRight {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 .pill {
@@ -53,7 +61,7 @@ canvas {
   cursor: pointer;
 }
 
-/* Thermal legend stays */
+/* Thermal legend */
 .legend {
   position: fixed;
   top: 58px;
@@ -91,6 +99,7 @@ canvas {
   margin-top: 6px;
 }
 
+/* Controls panel */
 .controls {
   position: fixed;
   left: 10px;
@@ -142,7 +151,7 @@ input[type="checkbox"] { transform: scale(1.1); }
   margin-right: 6px;
 }
 
-/* Modal */
+/* Modal (mobile scroll-safe) */
 .modalBackdrop {
   position: fixed;
   inset: 0;
@@ -177,7 +186,7 @@ input[type="checkbox"] { transform: scale(1.1); }
   flex: 0 0 auto;
   display: flex;
   justify-content: space-between;
-  align-items: centre;
+  align-items: center;
   padding: 14px 14px;
   border-bottom: 1px solid rgba(255,255,255,0.10);
 }
@@ -212,7 +221,7 @@ code {
   border-radius: 6px;
 }
 
-/* Learn graphics */
+/* Learn/Colour 101 graphics */
 .learnGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -221,7 +230,9 @@ code {
 }
 
 @media (min-width: 720px) {
-  .learnGrid { grid-template-columns: 1fr 1fr; }
+  .learnGrid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .learnCard {
