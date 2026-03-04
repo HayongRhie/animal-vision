@@ -138,6 +138,7 @@ input[type="checkbox"] { transform: scale(1.1); }
 }
 
 /* Modal */
+/* Modal */
 .modalBackdrop {
   position: fixed;
   inset: 0;
@@ -147,6 +148,9 @@ input[type="checkbox"] { transform: scale(1.1); }
   justify-content: center;
   padding: 18px;
   z-index: 20;
+
+  /* allow scroll wheel/touch to reach modal body */
+  overscroll-behavior: contain;
 }
 
 .modal {
@@ -157,10 +161,15 @@ input[type="checkbox"] { transform: scale(1.1); }
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.12);
   backdrop-filter: blur(14px);
+
+  /* key: header fixed, body scrolls */
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
 .modalHeader {
+  flex: 0 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -168,29 +177,14 @@ input[type="checkbox"] { transform: scale(1.1); }
   border-bottom: 1px solid rgba(255,255,255,0.10);
 }
 
-.modalTitle { font-weight: 600; }
-
-.modalClose {
-  background: transparent;
-  color: var(--text);
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-}
-
 .modalBody {
+  flex: 1 1 auto;
   padding: 14px;
-  overflow: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* iOS momentum scrolling */
   color: rgba(255,255,255,0.88);
   line-height: 1.5;
 }
-
-.modalBody h3 {
-  margin: 12px 0 6px 0;
-  font-size: 15px;
-}
-
-.modalBody ul { margin: 6px 0 10px 18px; }
 
 .smallNote {
   color: rgba(255,255,255,0.70);
