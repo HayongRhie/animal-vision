@@ -58,7 +58,7 @@ function wavelengthScaleSVG() {
     <text x="470" y="80" fill="rgba(255,255,255,0.72)" font-size="12" font-family="system-ui">~1000+ nm</text>
 
     <text x="10" y="105" fill="rgba(255,255,255,0.65)" font-size="12" font-family="system-ui">
-      Phone cameras measure RGB in the visible range, not UV or IR.
+      This phone camera measures RGB in the visible range — not UV or IR.
     </text>
   </svg>
   `;
@@ -78,23 +78,15 @@ function coneDiagramSVG(modeId) {
   } else if (m === 2) {
     label = "Bee (concept): UV + Blue + Green";
     cones = ["UV", "B", "G"];
-    note = "UV is visualised via an inferred proxy (not measured UV).";
-  } else if ([9, 16, 17].includes(m)) {
-    label = "Tetrachromat concept: 4 cones (often incl. UV)";
+    note = "UV here is inferred (not actually measured).";
+  } else if (m === 9) {
+    label = "Bird (concept): 4 cones (incl. UV)";
     cones = ["UV", "S", "M", "L"];
-    note = "A 4D cone space cannot be fully displayed on an RGB screen.";
-  } else if (m === 18) {
-    label = "Many-channel concept (dragonfly)";
-    cones = ["Many channels"];
-    note = "We use ‘channelisation’ to communicate lots of spectral channels (concept).";
-  } else if (m === 19) {
-    label = "Reindeer UV concept";
-    cones = ["UV (concept)", "S", "M", "L"];
-    note = "We add an inferred UV-like layer (not real UV capture).";
+    note = "A 4D cone space can’t be fully displayed on an RGB screen.";
   } else if (m === 10) {
     label = "Low-light concept: rod-dominant";
     cones = ["Rod"];
-    note = "We show a greyscale/contrast mode to represent luminance emphasis.";
+    note = "Shown as grayscale/contrast to represent luminance emphasis.";
   } else if (m === 11) {
     label = "Thermal concept: IR sense (not camera)";
     cones = ["Visible RGB", "IR (concept)"];
@@ -102,7 +94,7 @@ function coneDiagramSVG(modeId) {
   } else if (m === 12) {
     label = "Many-channel concept (mantis shrimp)";
     cones = ["Many channels (concept)"];
-    note = "We use banded colour to communicate ‘channel richness,’ not accuracy.";
+    note = "We show ‘channel richness’ without claiming accuracy.";
   } else if ([5, 6, 7, 13, 14].includes(m)) {
     label = "Human colour-vision difference (concept)";
     cones = ["S", "M", "L"];
@@ -110,7 +102,7 @@ function coneDiagramSVG(modeId) {
   } else if (m === 15) {
     label = "Achromatopsia concept: luminance-driven";
     cones = ["Rod / Luminance"];
-    note = "Displayed as greyscale with adjustable contrast.";
+    note = "Displayed as grayscale with adjustable contrast.";
   }
 
   const items = cones.map((c, i) => {
@@ -119,12 +111,9 @@ function coneDiagramSVG(modeId) {
     const h = 58;
     return `
       <g>
-        <rect x="${x}" y="38" width="${w}" height="${h}" rx="14"
-          fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.18)"/>
-        <text x="${x + w/2}" y="73" text-anchor="middle" fill="rgba(255,255,255,0.88)"
-          font-size="16" font-family="system-ui" font-weight="600">${c}</text>
-        <text x="${x + w/2}" y="95" text-anchor="middle" fill="rgba(255,255,255,0.65)"
-          font-size="11" font-family="system-ui">channel</text>
+        <rect x="${x}" y="38" width="${w}" height="${h}" rx="14" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.18)"/>
+        <text x="${x + w/2}" y="73" text-anchor="middle" fill="rgba(255,255,255,0.88)" font-size="16" font-family="system-ui" font-weight="600">${c}</text>
+        <text x="${x + w/2}" y="95" text-anchor="middle" fill="rgba(255,255,255,0.65)" font-size="11" font-family="system-ui">channel</text>
       </g>
     `;
   }).join("");
@@ -138,21 +127,21 @@ function coneDiagramSVG(modeId) {
   `;
 }
 
-/* ---------- Scientific background (Learn panel) ---------- */
+/* ---------- Scientific background blocks used in Learn panel ---------- */
 
 const SCIENCE_BG = `
 <h3>Core idea: colour is biology + physics</h3>
 <ul>
-  <li><b>Light</b> is electromagnetic radiation. Humans call ~<b>400–700 nm</b> “visible”.</li>
+  <li><b>Light</b> is electromagnetic radiation. Humans call ~<b>400–700 nm</b> “visible.”</li>
   <li><b>Photoreceptors</b> convert photons to neural signals. Humans use <b>cones</b> for colour and <b>rods</b> for low-light.</li>
-  <li>Human cones are often summarised as <b>S/M/L</b> (short/medium/long wavelength sensitive). Many animals have different sets.</li>
+  <li>Human cones are often summarized as <b>S/M/L</b> (short/medium/long wavelength sensitive). Many animals have different sets.</li>
 </ul>
 
-<h3>What this visualisation is doing</h3>
+<h3>What this visualization is doing</h3>
 <ul>
   <li>Your phone camera measures only <b>three channels (RGB)</b> in the visible range.</li>
   <li>Some modes apply a <b>channel-mixing transform</b> to mimic fewer or altered cone channels (e.g., dichromacy).</li>
-  <li>“UV” / “thermal” modes are <b>concept visualisations</b>: we compute an <b>inferred proxy</b> from RGB and map it to an overlay.</li>
+  <li>Some modes add an <b>inferred overlay</b> (e.g., “UV” / “thermal”) computed from RGB — not from real UV/IR photons.</li>
 </ul>
 
 <div class="smallNote">
@@ -160,7 +149,7 @@ const SCIENCE_BG = `
 </div>
 `;
 
-/* ---------- Mode info ---------- */
+/* ---------- Mode info + Try-this prompts ---------- */
 
 const MODE_INFO = {
   0: {
@@ -176,21 +165,21 @@ const MODE_INFO = {
   1: {
     name: "Dog (dichromat)",
     photoreceptors: ["Often modelled as dichromats (2 cone classes) + rods."],
-    what: ["Red–green differences compress; blues often stand out more."],
+    what: ["Red–green differences compress; blues tend to stand out more."],
     why: ["With two cone channels, many hues collapse toward similar responses."],
-    model: ["We blend R and G into a shared channel; Strength blends toward that transform."],
-    limits: ["Approximation: camera RGB ≠ dog cone responses; RGB screens can’t recreate dog colour space exactly."],
-    try: ["Point at red vs green objects (fruit, packaging).", "Notice they become more similar."]
+    model: ["We blend R and G into a shared channel; slider blends toward that transform."],
+    limits: ["Approximation: camera RGB ≠ dog cone responses; RGB display can’t recreate dog colour space exactly."],
+    try: ["Point at red vs green objects (fruit, packaging).", "Notice they become more similar on the right side."]
   },
 
   4: {
     name: "Cat (dichromat)",
-    photoreceptors: ["Often treated as dichromat-like in educational models."],
-    what: ["Reduced red–green discrimination (similar idea to dog)."],
+    photoreceptors: ["Commonly treated as dichromat-like for educational models."],
+    what: ["Reduced red–green discrimination (similar to dog)."],
     why: ["Many mammals have fewer colour channels than humans."],
-    model: ["R/G mixing with slightly different weighting."],
-    limits: ["Stylised visualisation."],
-    try: ["Try colourful clothing or books.", "Watch warm hues separate less."]
+    model: ["A slightly different R/G weighting than dog; slider controls strength."],
+    limits: ["Stylized visualization."],
+    try: ["Point at colourful clothing or books.", "Look for reduced separation between warm hues."]
   },
 
   8: {
@@ -198,23 +187,27 @@ const MODE_INFO = {
     photoreceptors: ["Often modelled as dichromats (2 cone classes)."],
     what: ["Dichromat-like compression with slightly different weighting."],
     why: ["Two-channel colour coding limits separability of certain hues."],
-    model: ["R/G blended; blue partly tied to blended channel; Strength controls intensity."],
+    model: ["R/G blended; blue partly tied to blended channel; slider controls strength."],
     limits: ["Approximation from RGB camera feed."],
-    try: ["Try outdoor scenes (grass/trees/sky).", "Compare foliage/sky separation."]
+    try: ["Point at outdoor scenes (grass/trees/sky).", "Compare sky/foliage separation."]
   },
 
   2: {
     name: "Bee (concept: UV inferred)",
     photoreceptors: ["Many insects: UV/Blue/Green sensitivity (no human-like ‘red’ cone)."],
-    what: ["Red is reduced; an inferred ‘UV layer’ appears as false colour."],
+    what: ["Red is reduced; an inferred ‘UV layer’ appears as an overlay."],
     why: ["UV can reveal patterns (e.g., nectar guides on flowers)."],
     model: [
-      "Suppress red contribution (concept of no red cone).",
-      "Compute an inferred proxy from RGB and map it to a false-colour overlay.",
-      "UV / Overlay controls the overlay amount."
+      "We suppress the red contribution (concept of no red cone).",
+      "Compute an inferred proxy from RGB and map it into a false overlay.",
+      "UV slider controls blend."
     ],
     limits: ["Phones can’t measure UV here — this is inferred from visible cues."],
-    try: ["Try glossy packaging, magazines, bright whites.", "Use Compare to emphasise it’s an added concept layer."]
+    try: [
+      "Try printed magazines, glossy packaging, certain fabrics.",
+      "Try bright whites (in real life, many fluoresce under UV).",
+      "Use Compare to show the added ‘extra channel’ concept."
+    ]
   },
 
   9: {
@@ -222,59 +215,19 @@ const MODE_INFO = {
     photoreceptors: ["Many birds: 4 cone classes (often including UV) + oil droplets affecting spectra."],
     what: ["More saturated look + subtle inferred UV layer."],
     why: ["An extra channel can increase discriminability between colours."],
-    model: ["Strength boosts saturation; UV / Overlay adds an inferred UV layer."],
+    model: ["Boost saturation + optional inferred UV layer; sliders control both."],
     limits: ["4D cone response space can’t be perfectly displayed on RGB screens."],
-    try: ["Try colourful posters/signs.", "Increase Strength, then Compare with baseline."]
-  },
-
-  16: {
-    name: "Pigeon (tetrachromat concept)",
-    photoreceptors: ["Many pigeons/birds have four cone types and strong colour discrimination."],
-    what: ["Slightly stronger saturation + mild inferred UV layer."],
-    why: ["Extra spectral channels can increase discriminability."],
-    model: ["Like Bird, but with a gentler UV layer and stronger saturation response."],
-    limits: ["Conceptual — display is still RGB."],
-    try: ["Try colourful fabrics or painted surfaces.", "Look for stronger colour separation than baseline."]
-  },
-
-  17: {
-    name: "Bluebottle butterfly (UV/tetrachromat concept)",
-    photoreceptors: ["Many butterflies have UV sensitivity and rich colour vision (often multiple opsins)."],
-    what: ["Vivid blues/iridescence pop; inferred UV layer is stronger than Bird."],
-    why: ["Butterflies can use UV cues and fine spectral differences for signalling."],
-    model: ["Saturation boost + stronger inferred UV overlay (still not real UV capture)."],
-    limits: ["Phone cannot see UV; iridescence depends on lighting geometry."],
-    try: ["Try shiny/iridescent materials, blue packaging, or reflective surfaces.", "Move the phone slightly — look for changes."]
-  },
-
-  18: {
-    name: "Dragonfly (many-channel concept)",
-    photoreceptors: ["Dragonflies can have many opsins; colour processing is complex (concept here)."],
-    what: ["Colours become ‘channelised’ into more discrete bands."],
-    why: ["Lots of spectral channels suggests a different way to partition colour space."],
-    model: ["We quantise hue into many bands; Strength increases channel count."],
-    limits: ["Strongly conceptual; not a physiological model."],
-    try: ["Try gradients, posters, colourful book covers.", "Increase Strength to see banding/partitioning."]
-  },
-
-  19: {
-    name: "Reindeer (UV concept)",
-    photoreceptors: ["Some Arctic animals are discussed in relation to UV sensitivity (concept)."],
-    what: ["Adds an inferred UV-like contrast layer without removing normal colour."],
-    why: ["The idea: UV can enhance contrast in snowy environments (conceptual here)."],
-    model: ["Compute a UV-like proxy from RGB and blend it in gently; UV / Overlay controls intensity."],
-    limits: ["Not real UV imaging."],
-    try: ["Try high-contrast scenes (white paper vs coloured inks).", "Increase UV / Overlay and Compare."]
+    try: ["Try colourful scenes (posters, signs).", "Boost saturation and compare with baseline."]
   },
 
   10: {
     name: "Shark (low-light / monochrome)",
     photoreceptors: ["Low-light vision is often rod-dominant (luminance heavy)."],
-    what: ["Greyscale with adjustable contrast."],
+    what: ["Grayscale with adjustable contrast."],
     why: ["In dim conditions, luminance/contrast dominates over hue."],
-    model: ["Convert to luminance and apply a contrast curve; Strength controls contrast."],
+    model: ["Convert to luminance and apply a contrast curve; slider controls contrast."],
     limits: ["Not species-specific; communicates the low-light idea."],
-    try: ["Dim the room slightly.", "Increase Strength and watch edges/forms pop."]
+    try: ["Dim the room slightly and point at a scene.", "Increase contrast to see edge emphasis."]
   },
 
   11: {
@@ -282,19 +235,23 @@ const MODE_INFO = {
     photoreceptors: ["Some snakes sense IR via specialised organs (not via phone camera)."],
     what: ["Thermal-style heatmap overlay blended over the scene."],
     why: ["Shows the idea of a non-visible channel adding information."],
-    model: ["Compute a heat-like proxy from visible cues; Strength controls contrast; UV / Overlay controls intensity."],
-    limits: ["Not real IR imaging — true thermal requires an IR sensor."],
-    try: ["Point at faces/hands (conceptual).", "Use Compare to highlight it’s a visualisation."]
+    model: [
+      "Compute a heat-like proxy from visible cues (brightness + red weighting).",
+      "Map to a thermal colourmap and blend.",
+      "Sliders: thermal contrast + intensity."
+    ],
+    limits: ["Not real IR imaging. True thermal requires an IR sensor."],
+    try: ["Point at your hand/face near the camera (conceptual).", "Use Compare to emphasize it’s not real thermal."]
   },
 
   12: {
     name: "Mantis shrimp (concept)",
-    photoreceptors: ["Very complex receptor system; perception isn’t simply ‘more colours’."],
-    what: ["Scene is channelised into discrete hue bands."],
+    photoreceptors: ["Very complex receptor system; perception isn’t simply ‘more colours.’"],
+    what: ["Scene is ‘channelised’ into discrete hue bands."],
     why: ["Communicates the idea of many channels without claiming accuracy."],
-    model: ["Quantise hue into N bands and remap; Strength increases banding."],
+    model: ["Quantise hue into N bands and remap colours; slider increases banding."],
     limits: ["Strongly conceptual."],
-    try: ["Try rainbow gradients or colourful posters.", "Increase Strength to see banding."]
+    try: ["Point at rainbow gradients / colourful posters.", "Increase channelisation to see banding."]
   },
 
   5: {
@@ -304,7 +261,7 @@ const MODE_INFO = {
     why: ["One cone channel is missing/ineffective."],
     model: ["Collapse R and G toward a shared channel."],
     limits: ["Educational approximation; real experiences vary."],
-    try: ["Try traffic lights, fruit, coloured charts.", "Watch red/green merge."]
+    try: ["Try traffic lights, fruit, coloured charts.", "Look for red/green merging."]
   },
 
   6: {
@@ -314,7 +271,7 @@ const MODE_INFO = {
     why: ["Long-wavelength channel is missing/ineffective."],
     model: ["Reduce red contribution by mixing it toward green."],
     limits: ["Educational approximation; real experiences vary."],
-    try: ["Try red text on dark backgrounds.", "Watch red lose brightness."]
+    try: ["Try red text on a dark background.", "Watch red lose brightness."]
   },
 
   7: {
@@ -334,7 +291,7 @@ const MODE_INFO = {
     why: ["Channels exist but overlap more strongly."],
     model: ["Gently pull green toward red."],
     limits: ["Educational approximation; not clinical."],
-    try: ["Try subtle red/green differences (pastels).", "Compare with baseline."]
+    try: ["Try subtle red/green differences (pastels).", "Compare with baseline to see mild effect."]
   },
 
   14: {
@@ -350,15 +307,15 @@ const MODE_INFO = {
   15: {
     name: "Achromatopsia (total colour blindness concept)",
     photoreceptors: ["Cone function absent/limited (concept); luminance dominates."],
-    what: ["Near-complete greyscale; contrast adjustable."],
+    what: ["Near-complete grayscale; contrast adjustable."],
     why: ["Colour channels contribute little; luminance dominates."],
-    model: ["Convert to luminance and adjust contrast; Strength controls contrast."],
+    model: ["Convert to luminance and adjust contrast; slider controls contrast."],
     limits: ["Educational concept; real experiences vary."],
-    try: ["Try colourful scenes.", "Use Strength to emphasise edges/forms."]
+    try: ["Try colourful scenes.", "Use contrast slider to emphasize edges/forms."]
   }
 };
 
-/* ---------- Layout plumbing ---------- */
+/* ---------- App plumbing ---------- */
 
 function resize() {
   canvas.width = window.innerWidth;
@@ -373,8 +330,6 @@ function updateCompareUI() {
 compareEl.addEventListener("change", updateCompareUI);
 updateCompareUI();
 
-/* ---------- Mode UI logic ---------- */
-
 function updateUIForMode() {
   const m = parseInt(modeEl.value, 10);
   const info = MODE_INFO[m] || { name: "Mode" };
@@ -388,45 +343,28 @@ function updateUIForMode() {
   strengthLabel.textContent = "Strength (n/a)";
   uvLabel.textContent = "UV / Overlay (n/a)";
 
-  // Mammal dichromats
   if ([1, 4, 8].includes(m)) {
     strengthEl.disabled = false;
     strengthLabel.textContent = "Strength";
   }
 
-  // Bee UV concept
   if (m === 2) {
     uvEl.disabled = false;
-    uvLabel.textContent = "UV / Overlay";
+    uvLabel.textContent = "UV emphasis (inferred)";
   }
 
-  // Tetrachromat concepts
-  if ([9, 16, 17].includes(m)) {
+  if (m === 9) {
     strengthEl.disabled = false;
     uvEl.disabled = false;
     strengthLabel.textContent = "Saturation boost";
     uvLabel.textContent = "UV layer (inferred)";
   }
 
-  // Dragonfly many-channel concept
-  if (m === 18) {
-    strengthEl.disabled = false;
-    strengthLabel.textContent = "Channel richness";
-  }
-
-  // Reindeer UV concept
-  if (m === 19) {
-    uvEl.disabled = false;
-    uvLabel.textContent = "UV / Overlay";
-  }
-
-  // Low-light
   if (m === 10) {
     strengthEl.disabled = false;
     strengthLabel.textContent = "Contrast";
   }
 
-  // Snake thermal
   if (m === 11) {
     strengthEl.disabled = false;
     uvEl.disabled = false;
@@ -435,19 +373,16 @@ function updateUIForMode() {
     thermalLegend.style.display = "block";
   }
 
-  // Mantis shrimp
   if (m === 12) {
     strengthEl.disabled = false;
     strengthLabel.textContent = "Channelisation";
   }
 
-  // Achromatopsia
   if (m === 15) {
     strengthEl.disabled = false;
     strengthLabel.textContent = "Contrast";
   }
 }
-
 modeEl.addEventListener("change", updateUIForMode);
 updateUIForMode();
 
@@ -494,10 +429,10 @@ function openLearn() {
     <h3>Why this happens</h3>
     ${list(info.why)}
 
-    <h3>What the app does (model)</h3>
+    <h3>What the model does</h3>
     ${list(info.model)}
 
-    <h3>Limits / what it is NOT</h3>
+    <h3>Limits</h3>
     ${list(info.limits)}
 
     <h3>Try this</h3>
@@ -582,7 +517,6 @@ float luma(vec3 rgb) {
 }
 
 float uvProxy(vec3 rgb){
-  // simple heuristic "UV-like" proxy from RGB (concept only)
   return clamp(rgb.b - 0.5*rgb.r, 0.0, 1.0);
 }
 
@@ -597,33 +531,7 @@ vec3 falseUV(float u){
   return mix(ab, c, hi);
 }
 
-vec3 overlayUV(vec3 rgb, float amt){
-  float u = uvProxy(rgb);
-  vec3 col = falseUV(u);
-  return mix(rgb, col, clamp(amt, 0.0, 1.0));
-}
-
-vec3 saturateBoost(vec3 rgb, float s){
-  float y = luma(rgb);
-  vec3 g = vec3(y);
-  return clamp(mix(g, rgb, s), 0.0, 1.0);
-}
-
-float contrastCurve(float x, float c){
-  // c in [0..1], maps to [1..2.2]
-  float k = 1.0 + 1.2*c;
-  return clamp((x - 0.5)*k + 0.5, 0.0, 1.0);
-}
-
-vec3 contrastRGB(vec3 rgb, float c){
-  return vec3(
-    contrastCurve(rgb.r, c),
-    contrastCurve(rgb.g, c),
-    contrastCurve(rgb.b, c)
-  );
-}
-
-/* Mammal dichromat-ish models */
+// Mammal dichromat-ish models
 vec3 dogView(vec3 rgb){
   float rg = 0.5*(rgb.r + rgb.g);
   return vec3(rg, rg, rgb.b);
@@ -638,45 +546,39 @@ vec3 horseView(vec3 rgb){
   return vec3(rg, rg, b);
 }
 
-/* Bee: suppress red + UV overlay */
+// Bee: inferred UV overlay
 vec3 beeConcept(vec3 rgb, float uvi){
-  vec3 base = vec3(0.55*rgb.r, rgb.g, rgb.b);
-  return mix(base, falseUV(uvProxy(rgb)), clamp(uvi, 0.0, 1.0));
+  vec3 base = vec3(0.60*rgb.r, rgb.g, rgb.b);
+  float u = uvProxy(rgb);
+  vec3 col = falseUV(u);
+  return mix(base, col, clamp(uvi, 0.0, 1.0));
 }
 
-/* Bird: saturation + mild UV overlay */
-vec3 birdConcept(vec3 rgb, float satAmt, float uvi){
-  vec3 sat = saturateBoost(rgb, 1.0 + 1.2*satAmt);
-  float a = clamp(uvi, 0.0, 1.0) * 0.55;
-  return mix(sat, falseUV(uvProxy(rgb)), a);
-}
-
-/* Pigeon: stronger saturation + slightly increased contrast; gentler UV */
-vec3 pigeonConcept(vec3 rgb, float satAmt, float uvi){
-  vec3 sat = saturateBoost(rgb, 1.0 + 1.6*satAmt);
-  vec3 ctr = contrastRGB(sat, 0.35*satAmt);
-  float a = clamp(uvi, 0.0, 1.0) * 0.35;
-  return mix(ctr, falseUV(uvProxy(rgb)), a);
-}
-
-/* Bluebottle butterfly: vivid blues + strong UV overlay */
-vec3 butterflyConcept(vec3 rgb, float satAmt, float uvi){
-  vec3 sat = saturateBoost(rgb, 1.0 + 1.8*satAmt);
-  // "Iridescent blue pop" (concept): boost B, slightly reduce G
-  vec3 pop = clamp(vec3(0.98*sat.r, 0.90*sat.g, 1.18*sat.b), 0.0, 1.0);
-  pop = contrastRGB(pop, 0.25 + 0.35*satAmt);
-  float a = clamp(uvi, 0.0, 1.0) * 0.85;
-  return mix(pop, falseUV(uvProxy(rgb)), a);
-}
-
-/* Low-light / monochrome */
-vec3 lowLight(vec3 rgb, float c){
+// Saturation boost helper
+vec3 saturateBoost(vec3 rgb, float s){
   float y = luma(rgb);
-  float v = contrastCurve(y, c);
+  vec3 gray = vec3(y);
+  return clamp(mix(gray, rgb, s), 0.0, 1.0);
+}
+
+// Bird concept: saturation + inferred UV layer
+vec3 birdConcept(vec3 rgb, float satBoost, float uvi){
+  vec3 sat = saturateBoost(rgb, 1.0 + 1.2*satBoost);
+  float u = uvProxy(rgb);
+  vec3 uvCol = falseUV(u);
+  float a = clamp(uvi, 0.0, 1.0) * 0.6;
+  return mix(sat, uvCol, a);
+}
+
+// Shark: monochrome + contrast
+vec3 sharkLowLight(vec3 rgb, float c){
+  float y = luma(rgb);
+  float cc = 1.0 + 1.8*c;
+  float v = clamp((y - 0.5)*cc + 0.5, 0.0, 1.0);
   return vec3(v);
 }
 
-/* Thermal */
+// Thermal colormap
 vec3 heatColor(float t){
   t = clamp(t, 0.0, 1.0);
   vec3 a = vec3(0.0, 0.0, 0.0);
@@ -700,16 +602,19 @@ vec3 heatColor(float t){
   return mix(mid, high, smoothstep(0.55, 0.9, t));
 }
 
+// Snake thermal concept
 vec3 snakeThermal(vec3 rgb, float contrastAmt, float intensity){
   float y = luma(rgb);
   float heat = clamp(0.55*rgb.r + 0.45*y, 0.0, 1.0);
-  heat = contrastCurve(heat, contrastAmt);
+  float cc = 1.0 + 2.0*contrastAmt;
+  heat = clamp((heat - 0.5)*cc + 0.5, 0.0, 1.0);
+
   vec3 col = heatColor(heat);
   float a = clamp(intensity, 0.0, 1.0);
   return mix(rgb, col, a);
 }
 
-/* Hue approximation + rainbow bands */
+// Mantis shrimp concept: discrete hue bands
 vec3 rainbow(float t){
   float r = 0.5 + 0.5*cos(6.28318*(t + 0.00));
   float g = 0.5 + 0.5*cos(6.28318*(t + 0.33));
@@ -729,8 +634,6 @@ float hueApprox(vec3 c) {
   if (h < 0.0) h += 1.0;
   return h;
 }
-
-/* Mantis shrimp: banded remap */
 vec3 mantisConcept(vec3 rgb, float amt){
   float h = hueApprox(rgb);
   float n = mix(6.0, 16.0, clamp(amt, 0.0, 1.0));
@@ -739,17 +642,7 @@ vec3 mantisConcept(vec3 rgb, float amt){
   return mix(rgb, pseudo, clamp(amt, 0.0, 1.0));
 }
 
-/* Dragonfly: many more bands + extra contrast */
-vec3 dragonflyConcept(vec3 rgb, float amt){
-  float h = hueApprox(rgb);
-  float n = mix(16.0, 48.0, clamp(amt, 0.0, 1.0));
-  float band = floor(h * n) / n;
-  vec3 pseudo = rainbow(band);
-  vec3 base = contrastRGB(rgb, 0.20 + 0.55*amt);
-  return mix(base, pseudo, clamp(amt, 0.0, 1.0));
-}
-
-/* Human colour vision differences */
+// Human colour vision differences (educational approximations)
 vec3 protanopia(vec3 rgb){
   return vec3(0.15*rgb.r + 0.85*rgb.g, rgb.g, rgb.b);
 }
@@ -771,7 +664,8 @@ vec3 deuteranomaly(vec3 rgb){
 }
 vec3 achromatopsia(vec3 rgb, float contrastAmt){
   float y = luma(rgb);
-  float v = contrastCurve(y, contrastAmt);
+  float cc = 1.0 + 1.8*contrastAmt;
+  float v = clamp((y - 0.5)*cc + 0.5, 0.0, 1.0);
   return vec3(v);
 }
 
@@ -785,27 +679,17 @@ void main() {
     if (mode == 0) result = rgb;
 
     else if (mode == 1) result = mix(rgb, dogView(rgb), clamp(strength, 0.0, 1.0));
+    else if (mode == 2) result = beeConcept(rgb, uvIntensity);
     else if (mode == 4) result = mix(rgb, catView(rgb), clamp(strength, 0.0, 1.0));
     else if (mode == 8) result = mix(rgb, horseView(rgb), clamp(strength, 0.0, 1.0));
-
-    else if (mode == 2) result = beeConcept(rgb, uvIntensity);
-
-    else if (mode == 9)  result = birdConcept(rgb, strength, uvIntensity);
-    else if (mode == 16) result = pigeonConcept(rgb, strength, uvIntensity);
-    else if (mode == 17) result = butterflyConcept(rgb, strength, uvIntensity);
-
-    else if (mode == 18) result = dragonflyConcept(rgb, strength);
-
-    // Reindeer: keep it simple + clearly visible (UV overlay with slider)
-    else if (mode == 19) result = overlayUV(contrastRGB(rgb, 0.25), uvIntensity * 0.85);
-
-    else if (mode == 10) result = lowLight(rgb, strength);
+    else if (mode == 9) result = birdConcept(rgb, strength, uvIntensity);
+    else if (mode == 10) result = sharkLowLight(rgb, strength);
     else if (mode == 11) result = snakeThermal(rgb, strength, uvIntensity);
     else if (mode == 12) result = mantisConcept(rgb, strength);
 
-    else if (mode == 5)  result = deuteranopia(rgb);
-    else if (mode == 6)  result = protanopia(rgb);
-    else if (mode == 7)  result = tritanopia(rgb);
+    else if (mode == 5) result = deuteranopia(rgb);
+    else if (mode == 6) result = protanopia(rgb);
+    else if (mode == 7) result = tritanopia(rgb);
     else if (mode == 13) result = deuteranomaly(rgb);
     else if (mode == 14) result = protanomaly(rgb);
     else if (mode == 15) result = achromatopsia(rgb, strength);
