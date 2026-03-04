@@ -126,7 +126,7 @@ const COLOUR_101_HTML = `
 <h2>What is colour?</h2>
 
 <p>
-<b>Colour</b> isn’t stored “inside” objects — it’s a <b>perception</b> built from how light hits a surface and how your eyes measure that light.
+<b>Colour</b> isn’t stored “inside” objects! It’s a <b>perception</b> built from how light hits a surface and how your eyes measure that light.
 </p>
 
 <div class="learnGrid">
@@ -158,7 +158,7 @@ const COLOUR_101_HTML = `
 <ul>
   <li>Your phone camera measures only <b>three channels (RGB)</b> in visible light.</li>
   <li>So UV/IR/polarisation modes here are <b>visualisations</b>: we infer a proxy from RGB and map it to colours.</li>
-  <li>Even when biology is real, this is still an RGB screen — some animal colour spaces can’t be shown perfectly.</li>
+  <li>Even when biology is real, this is still an RGB screen. Some animal colour spaces can’t be shown perfectly.</li>
 </ul>
 
 <div class="smallNote">
